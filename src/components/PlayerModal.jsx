@@ -8,10 +8,8 @@ export default function PlayerModal({ isOpen, onClose, media }) {
 
   useEffect(() => {
     if (!media || media.type !== 'live') return;
-    
     const video = videoRef.current;
     if (!video) return;
-
     let hls;
     if (Hls.isSupported()) {
       hls = new Hls();
@@ -22,7 +20,6 @@ export default function PlayerModal({ isOpen, onClose, media }) {
       video.src = media.url;
       video.play().catch(() => {});
     }
-
     return () => { if (hls) hls.destroy(); };
   }, [media]);
 
@@ -31,36 +28,33 @@ export default function PlayerModal({ isOpen, onClose, media }) {
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] flex items-center justify-center p-4 md:p-8"
+        className="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[100] flex items-center justify-center p-4 md:p-8"
       >
         <motion.div
-          initial={{ scale: 0.9, y: 20 }}
-          animate={{ scale: 1, y: 0 }}
-          exit={{ scale: 0.9, y: 20 }}
+          initial={{ scale: 0.95, y: 30, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.95, y: 30, opacity: 0 }}
+          transition={{ type: "spring", damping: 20, stiffness: 200 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-vault-dark border border-vault-gray rounded-lg w-full max-w-5xl overflow-hidden shadow-2xl"
+          className="glass-panel cut-tr-bl w-full max-w-5xl overflow-hidden"
         >
-          <div className="p-4 border-b border-vault-gray flex justify-between items-center">
-            <h3 className="font-serif text-xl text-white truncate">{media?.title}</h3>
-            <button onClick={onClose} className="text-gray-400 hover:text-white transition p-1 rounded-full hover:bg-vault-gray">
+          <div className="p-5 border-b border-white/5 flex justify-between items-center">
+            <h3 className="font-serif text-2xl text-accent-gold truncate">{media?.title}</h3>
+            <button onClick={onClose} className="text-gray-400 hover:text-white transition p-2 cut-sm hover:bg-white/5">
               <X size={24} />
             </button>
           </div>
-          <div className="p-4">
+          <div className="p-5">
             {media?.type === 'movie' && (
-              <iframe src={media.url} className="w-full aspect-video rounded" frameBorder="0" allowFullScreen title={media.title}></iframe>
+              <iframe src={media.url} className="w-full aspect-video cut-sm bg-black" frameBorder="0" allowFullScreen title={media.title}></iframe>
             )}
             {media?.type === 'book' && (
-              <iframe src={media.url} className="w-full h-[70vh] rounded bg-white" frameBorder="0" title={media.title}></iframe>
+              <iframe src={media.url} className="w-full h-[70vh] cut-sm bg-white" frameBorder="0" title={media.title}></iframe>
             )}
             {media?.type === 'live' && (
-              <video ref={videoRef} controls className="w-full aspect-video rounded bg-black" />
+              <video ref={videoRef} controls className="w-full aspect-video cut-sm bg-black" />
             )}
-            <p className="text-gray-500 text-xs mt-3 text-center tracking-wider">{media?.footer}</p>
+            <p className="text-gray-500 text-xs mt-4 text-center tracking-wider">{media?.footer}</p>
           </div>
         </motion.div>
       </motion.div>
