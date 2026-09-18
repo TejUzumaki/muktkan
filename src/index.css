@@ -6,17 +6,14 @@
   body {
     @apply bg-vault-black text-white font-sans antialiased;
   }
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
-  ::-webkit-scrollbar-track {
-    @apply bg-vault-black;
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-vault-gray rounded-full;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-accent-gold/50;
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
