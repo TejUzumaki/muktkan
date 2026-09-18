@@ -15,4 +15,8 @@ body {
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: #000; }
 ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #48484a; }
+
+@keyframes scrollText {
+  from { transform: translateY(100%); }
+  to { transform: translateY(-100%); }
+}
