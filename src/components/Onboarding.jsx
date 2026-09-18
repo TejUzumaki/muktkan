@@ -12,7 +12,7 @@ const SvgAvatar = ({ id, color }) => {
     <rect key="1" x="10" y="10" width="44" height="44" rx="12" fill={color} />,
     <polygon key="2" points="32,6 58,54 6,54" fill={color} />,
     <path key="3" d="M16 16 L48 16 L48 48 L16 48 Z M24 24 L40 24 L40 40 L24 40 Z" fillRule="evenodd" fill={color} />,
-    <circle key="4" cx="20" cy="20" r="12" fill={color} /><circle key="5" cx="44" cy="44" r="12" fill={color} opacity="0.6"/>,
+    <g key="4"><circle cx="20" cy="20" r="12" fill={color} /><circle cx="44" cy="44" r="12" fill={color} opacity="0.6" /></g>,
     <path key="6" d="M10 10 H54 V54 H10 Z M20 20 H44 V44 H20 Z" fill={color} stroke={color} strokeWidth="2"/>
   ];
   return (
