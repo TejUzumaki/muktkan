@@ -17,14 +17,26 @@ export const metadata: Metadata = {
   title: "Muktkan — The Hall of Liberated Media",
   description:
     "Muktkan (मुक्त 館) is a premium interface for discovering legally accessible films, books, and live channels from external sources.",
-  keywords: ["Muktkan", "public domain", "Internet Archive", "Project Gutenberg", "IPTV", "open source", "films", "books"],
+  keywords: [
+    "Muktkan",
+    "public domain",
+    "Internet Archive",
+    "Project Gutenberg",
+    "IPTV",
+    "open source",
+    "films",
+    "books",
+  ],
   authors: [{ name: "Tejas Gafat" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/muktkan-icon.svg",
+    shortcut: "/muktkan-icon.svg",
+    apple: "/muktkan-icon.svg",
   },
   openGraph: {
     title: "Muktkan — The Hall of Liberated Media",
-    description: "A premium interface for discovering legally accessible films, books and live channels from external sources.",
+    description:
+      "A premium interface for discovering legally accessible films, books and live channels from external sources.",
     siteName: "Muktkan",
     type: "website",
   },
