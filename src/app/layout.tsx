@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nodish — Media without the dish.",
+  title: "NO-DISH — Media without the dish.",
   description:
     "NO-DISH is a premium interface for discovering films, books, and live channels from external sources. Rights and availability vary by source, item, and jurisdiction.",
   keywords: [
-    "Nodish",
+    "NO-DISH",
     "open media",
     "Internet Archive",
     "Project Gutenberg",
@@ -34,10 +34,10 @@ export const metadata: Metadata = {
     apple: "/muktkan-icon.svg",
   },
   openGraph: {
-    title: "Nodish — Media without the dish.",
+    title: "NO-DISH — Media without the dish.",
     description:
       "A premium interface for discovering films, books and live channels from external sources. Rights and availability vary by source, item and jurisdiction.",
-    siteName: "Nodish",
+    siteName: "NO-DISH",
     type: "website",
   },
 };

@@ -34,7 +34,7 @@ export function TopBar() {
         <a href="#top" className="flex items-center gap-2.5">
           <NodishMark size={32} />
           <div className="leading-tight">
-            <p className="text-base font-semibold tracking-tight">Nodish</p>
+            <p className="text-base font-semibold tracking-tight">NO-DISH</p>
             <p className="-mt-0.5 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Media without the dish</p>
           </div>
         </a>

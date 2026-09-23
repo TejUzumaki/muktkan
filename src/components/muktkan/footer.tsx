@@ -31,9 +31,9 @@ export function Footer() {
               <NodishMark size={30} />
 
               <div className="leading-tight">
-                <p className="text-base font-semibold tracking-tight">Nodish</p>
+                <p className="text-base font-semibold tracking-tight">NO-DISH</p>
                 <p className="-mt-0.5 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  Nodish
+                  NO-DISH
                 </p>
               </div>
             </div>
@@ -161,7 +161,7 @@ export function Footer() {
       <div className="mt-8 flex flex-col gap-4 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p>
-              © {new Date().getFullYear()} Nodish · A cultural preservation
+              © {new Date().getFullYear()} NO-DISH · A cultural preservation
               interface.
             </p>
 

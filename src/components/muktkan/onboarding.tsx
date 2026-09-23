@@ -80,8 +80,8 @@ export function Onboarding() {
           <div className="flex items-center gap-3">
             <NodishMark />
             <div>
-              <p className="text-lg font-semibold tracking-tight">Nodish</p>
-              <p className="-mt-1 text-xs text-muted-foreground">Nodish · Media without the dish.</p>
+              <p className="text-lg font-semibold tracking-tight">NO-DISH</p>
+              <p className="-mt-1 text-xs text-muted-foreground">NO-DISH · Media without the dish.</p>
             </div>
           </div>
           <div className="hidden items-center gap-2 sm:flex">

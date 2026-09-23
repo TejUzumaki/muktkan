@@ -1,13 +1,13 @@
-# Nodish — Project Worklog
+# NO-DISH — Project Worklog
 
-> Nodish · Media without the dish.. A premium front door to 100% legal,
+> NO-DISH · Media without the dish.. A premium front door to 100% legal,
 > open-source and public-domain media — films (Internet Archive), books
 > (Project Gutenberg), and live TV (open IPTV m3u playlists).
 
 ---
 Task ID: 1–9 (initial build)
 Agent: Z.ai Code (main)
-Task: Build the full Nodish app — onboarding, dynamic theming, center-focus carousel, details+FAB, players, three real data sources.
+Task: Build the full NO-DISH app — onboarding, dynamic theming, center-focus carousel, details+FAB, players, three real data sources.
 
 Work Log:
 - Inspected existing Next.js 16 scaffold (App Router, Tailwind 4, shadcn/ui, Framer Motion, Zustand, React Query all available). Dev server already running on :3000.
@@ -38,7 +38,7 @@ Work Log:
   - `topbar.tsx` — sticky glass topbar: wordmark, Films/Books/Live TV anchors, debounced cross-source search dropdown, theme toggle, profile chip (avatar + name + dropdown: re-personalize / library).
   - `footer.tsx` — sticky footer (the layout uses `min-h-screen flex flex-col` + `mt-auto`-style main) with source attribution + public-domain promise.
   - `app-shell.tsx` — orchestrates: hydration-safe mount guard (`useSyncExternalStore`), onboarding vs home, DetailsPanel + PlayerOverlay always mounted. Home interleaves top movies + books into the featured hero carousel.
-- `app/layout.tsx` — Nodish metadata, Geist fonts, ThemeApplier, Toaster, and an inline pre-paint bootstrap script that reads persisted accent/theme from localStorage to set `--brand` + `.dark` before first paint (no FOUC / no flash). `suppressHydrationWarning` on `<html>`.
+- `app/layout.tsx` — NO-DISH metadata, Geist fonts, ThemeApplier, Toaster, and an inline pre-paint bootstrap script that reads persisted accent/theme from localStorage to set `--brand` + `.dark` before first paint (no FOUC / no flash). `suppressHydrationWarning` on `<html>`.
 - `app/page.tsx` — renders `<AppShell/>`.
 - ESLint: clean (resolved React 19 `react-hooks/set-state-in-effect` and `react-hooks/refs` rules by using render-time state adjustment, functional setState, `useSyncExternalStore`, and splitting DOM-only transforms from state updates).
 
@@ -57,7 +57,7 @@ Verification (Agent Browser end-to-end):
 - VLM: premium dark aesthetic, solid backgrounds, rounded edges, glassmorphism hints, high-contrast typography, clean spacious layout, no overlapping/broken layout.
 
 Stage Summary:
-- Nodish is fully built and browser-verified across the entire golden path: onboarding → home → hero carousel → details + FAB → movie/book/tv players. Lint clean, zero runtime/console errors, dynamic accent theming confirmed end-to-end.
+- NO-DISH is fully built and browser-verified across the entire golden path: onboarding → home → hero carousel → details + FAB → movie/book/tv players. Lint clean, zero runtime/console errors, dynamic accent theming confirmed end-to-end.
 - Data sources: movies = curated archive.org catalog (+ live attempt), books = curated Gutenberg catalog (+ live attempt), TV = live iptv-org parse. All three `/api/*` routes return 200.
 - Artifacts: `src/lib/{types,store,viewer-store,palette,avatars,use-shelf,movie-catalog,book-catalog}.ts(x)`, `src/app/api/{movies,books,tv}/route.ts`, `src/components/muktkan/*`, `src/app/{layout,page,globals.css}`.
 

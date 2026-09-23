@@ -5,7 +5,7 @@ import { CURATED_BOOKS } from "@/lib/book-catalog";
 import { Film, BookOpen, Radio, ShieldCheck } from "lucide-react";
 
 /**
- * "Hall stats" — a compact strip showing the live scale of the Nodish
+ * "Hall stats" — a compact strip showing the live scale of the NO-DISH
  * catalog: films, books, live TV channels, source-based catalog. Reinforces the
  * app's value proposition (scale + legality) in one premium glance.
  *
