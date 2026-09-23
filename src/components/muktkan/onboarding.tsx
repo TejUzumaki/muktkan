@@ -78,10 +78,10 @@ export function Onboarding() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <MuktkanMark />
+            <NodishMark />
             <div>
-              <p className="text-lg font-semibold tracking-tight">Muktkan</p>
-              <p className="-mt-1 text-xs text-muted-foreground">मुक्त 館 · Hall of Liberated Media</p>
+              <p className="text-lg font-semibold tracking-tight">Nodish</p>
+              <p className="-mt-1 text-xs text-muted-foreground">Nodish · Media without the dish.</p>
             </div>
           </div>
           <div className="hidden items-center gap-2 sm:flex">
@@ -376,7 +376,7 @@ const ORIENTATIONS: {
   },
 ];
 
-export function MuktkanMark({ size = 34 }: { size?: number }) {
+export function NodishMark({ size = 34 }: { size?: number }) {
   return (
     <span
       className="grid place-items-center rounded-xl text-[var(--brand-foreground)] shadow-lg"

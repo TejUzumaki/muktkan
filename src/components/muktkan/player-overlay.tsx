@@ -254,7 +254,7 @@ function BookReader({ media }: { media: BookMedia }) {
           </article>
 
           <footer className="py-16 text-center text-xs opacity-40">
-            End of text · Project Gutenberg public-domain edition
+            End of text · Project Gutenberg edition
           </footer>
         </div>
 

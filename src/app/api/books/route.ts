@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { BookMedia } from "@/lib/types";
 import { CURATED_BOOKS, curatedBookToMedia } from "@/lib/book-catalog";
 
-// Muktkan Books shelf. Backbone: curated famous public-domain works from
+// NO-DISH Books shelf. Backbone: curated classic works from
 // Project Gutenberg. Enriched at request time with a live Gutendex call
 // (short timeout) when the host is reachable.
 
@@ -88,7 +88,7 @@ export async function GET(req: NextRequest) {
           kind: "book",
           gutenbergId: b.id,
           title: b.title.replace(/\s+/g, " ").trim(),
-          description: b.subjects?.slice(0, 4).join(" · ") || `A public-domain work by ${author}.`,
+          description: b.subjects?.slice(0, 4).join(" · ") || `A work by ${author}, available through Project Gutenberg.`,
           poster: cover,
           backdrop: cover,
           year: firstYear(b.subjects?.join(" ") ?? "") ?? undefined,

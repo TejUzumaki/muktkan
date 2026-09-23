@@ -1,6 +1,6 @@
 import type { BookMedia } from "./types";
 
-// Curated backbone of famous public-domain works hosted by Project Gutenberg.
+// Curated backbone of classic works available through external sources hosted by Project Gutenberg.
 // IDs are stable gutenberg.org ebook numbers; covers & the HTML reader are
 // loaded by the user's browser from gutenberg.org (reachable). A live
 // Gutendex call is attempted at request time and merged on top when reachable.

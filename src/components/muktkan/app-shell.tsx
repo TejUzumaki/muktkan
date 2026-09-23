@@ -41,7 +41,7 @@ function useMounted() {
 const MOVIES_RAIL: RailConfig = {
   kind: "movie",
   title: "Films",
-  subtitle: "Public-domain cinema from the Internet Archive",
+  subtitle: "Cinema discovered from external sources",
   categories: [
     { id: "featured", label: "Featured" },
     { id: "noir", label: "Noir" },
@@ -56,7 +56,7 @@ const MOVIES_RAIL: RailConfig = {
 const BOOKS_RAIL: RailConfig = {
   kind: "book",
   title: "Books",
-  subtitle: "Public-domain literature from Project Gutenberg",
+  subtitle: "Literature discovered from external sources",
   categories: [
     { id: "popular", label: "Most read" },
     { id: "fiction", label: "Fiction" },

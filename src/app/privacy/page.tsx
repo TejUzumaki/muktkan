@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Muktkan",
-  description: "Privacy information for Muktkan — The Hall of Liberated Media.",
+  title: "Privacy Policy — Nodish",
+  description: "Privacy information for Nodish — Media without the dish.",
 };
 
 export default function PrivacyPage() {
@@ -13,12 +13,12 @@ export default function PrivacyPage() {
           href="/"
           className="text-sm text-muted-foreground transition hover:text-foreground"
         >
-          ← Back to Muktkan
+          ← Back to Nodish
         </a>
 
         <header className="mt-10">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Muktkan
+            Nodish
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
             Privacy Policy
@@ -31,15 +31,15 @@ export default function PrivacyPage() {
         <div className="mt-10 space-y-10 text-sm leading-7 text-muted-foreground">
           <section>
             <h2 className="text-lg font-semibold text-foreground">
-              1. About Muktkan
+              1. About Nodish
             </h2>
             <p className="mt-3">
-              Muktkan (मुक्त 館), The Hall of Liberated Media, is a free,
+              Nodish, Media without the dish., is a free,
               non-commercial media discovery and viewing interface created and
               developed by Tejas Gafat.
             </p>
             <p className="mt-3">
-              Muktkan does not operate paid subscriptions or advertising and
+              Nodish does not operate paid subscriptions or advertising and
               does not intentionally sell personal information.
             </p>
           </section>
@@ -49,14 +49,14 @@ export default function PrivacyPage() {
               2. Information stored in your browser
             </h2>
             <p className="mt-3">
-              Muktkan uses browser storage for application functionality and
+              Nodish uses browser storage for application functionality and
               preferences. Depending on the features you use, this may include
               your selected theme, accent, onboarding preferences, reading or
               viewing progress, and library-related state.
             </p>
             <p className="mt-3">
               This information is stored locally in your browser rather than
-              being used as an Muktkan account profile.
+              being used as a Nodish account profile.
             </p>
           </section>
 
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
               3. Accounts and personal information
             </h2>
             <p className="mt-3">
-              Muktkan currently does not require an account, password, payment
+              Nodish currently does not require an account, password, payment
               information, or personal profile to use its core features.
             </p>
             <p className="mt-3">
@@ -79,13 +79,13 @@ export default function PrivacyPage() {
               4. Hosting and server requests
             </h2>
             <p className="mt-3">
-              Muktkan is hosted using third-party infrastructure. Requests to
+              Nodish is hosted using third-party infrastructure. Requests to
               the application may therefore be processed by the hosting
               provider and may appear in infrastructure or security logs
               according to that provider&apos;s policies.
             </p>
             <p className="mt-3">
-              Muktkan does not operate its own user analytics database or
+              Nodish does not operate its own user analytics database or
               intentionally build advertising profiles from visitors.
             </p>
           </section>
@@ -95,16 +95,16 @@ export default function PrivacyPage() {
               5. Third-party content services
             </h2>
             <p className="mt-3">
-              Muktkan connects with external services to retrieve or display
+              Nodish connects with external services to retrieve or display
               media information and content. These currently include Internet
               Archive, Project Gutenberg, Gutendex, and publicly listed IPTV
               stream sources indexed by iptv-org.
             </p>
             <p className="mt-3">
-              When your browser or the Muktkan application requests resources
+              When your browser or the Nodish application requests resources
               from an external service, that service may receive technical
               request information according to its own privacy policy and
-              infrastructure practices. Muktkan does not control the privacy
+              infrastructure practices. Nodish does not control the privacy
               practices of independent third-party services.
             </p>
           </section>
@@ -114,7 +114,7 @@ export default function PrivacyPage() {
               6. Cookies and tracking
             </h2>
             <p className="mt-3">
-              Muktkan does not intentionally use advertising cookies or
+              Nodish does not intentionally use advertising cookies or
               cross-site tracking technologies as part of its core application.
             </p>
             <p className="mt-3">
@@ -129,8 +129,8 @@ export default function PrivacyPage() {
               7. External websites and services
             </h2>
             <p className="mt-3">
-              Muktkan may link to, embed, or retrieve information from external
-              websites and services. Once you leave Muktkan or interact directly
+              Nodish may link to, embed, or retrieve information from external
+              websites and services. Once you leave Nodish or interact directly
               with an external provider, that provider&apos;s own terms and
               privacy practices apply.
             </p>
@@ -141,7 +141,7 @@ export default function PrivacyPage() {
               8. Changes to this policy
             </h2>
             <p className="mt-3">
-              This policy may be updated when Muktkan&apos;s architecture,
+              This policy may be updated when Nodish&apos;s architecture,
               features, hosting arrangements, or third-party integrations
               change. The date at the top of this page indicates the latest
               revision.
@@ -154,14 +154,14 @@ export default function PrivacyPage() {
             </h2>
             <p className="mt-3">
               If you have a privacy question or a concern about content
-              presented through Muktkan, please use the project&apos;s official
+              presented through Nodish, please use the project&apos;s official
               repository or project contact channel to raise the issue.
             </p>
           </section>
 
           <section className="border-t border-border/60 pt-8">
             <p>
-              Muktkan is a free, non-commercial project. Its goal is to provide
+              Nodish is a free, non-commercial project. Its goal is to provide
               a respectful interface for discovering and experiencing
               legitimately accessible media while keeping user data collection
               to a minimum.

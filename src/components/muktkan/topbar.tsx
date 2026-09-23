@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useOnboarding } from "@/lib/store";
 import { useViewer } from "@/lib/viewer-store";
 import { AvatarArt } from "@/lib/avatars";
-import { MuktkanMark } from "./onboarding";
+import { NodishMark } from "./onboarding";
 import { cn } from "@/lib/utils";
 import { Search, Moon, Sun, ChevronDown, Pencil, Heart, X, Keyboard } from "lucide-react";
 
@@ -32,10 +32,10 @@ export function TopBar() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6">
         <a href="#top" className="flex items-center gap-2.5">
-          <MuktkanMark size={32} />
+          <NodishMark size={32} />
           <div className="leading-tight">
-            <p className="text-base font-semibold tracking-tight">Muktkan</p>
-            <p className="-mt-0.5 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">मुक्त 館</p>
+            <p className="text-base font-semibold tracking-tight">Nodish</p>
+            <p className="-mt-0.5 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Media without the dish</p>
           </div>
         </a>
 

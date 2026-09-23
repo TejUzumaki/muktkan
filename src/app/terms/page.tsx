@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Use — Muktkan",
-  description: "Terms of use for Muktkan — The Hall of Liberated Media.",
+  title: "Terms of Use — Nodish",
+  description: "Terms of use for Nodish — Media without the dish.",
 };
 
 export default function TermsPage() {
@@ -13,12 +13,12 @@ export default function TermsPage() {
           href="/"
           className="text-sm text-muted-foreground transition hover:text-foreground"
         >
-          ← Back to Muktkan
+          ← Back to Nodish
         </a>
 
         <header className="mt-10">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Muktkan
+            Nodish
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
             Terms of Use
@@ -31,10 +31,10 @@ export default function TermsPage() {
         <div className="mt-10 space-y-10 text-sm leading-7 text-muted-foreground">
           <section>
             <h2 className="text-lg font-semibold text-foreground">
-              1. What Muktkan is
+              1. What Nodish is
             </h2>
             <p className="mt-3">
-              Muktkan (मुक्त 館), The Hall of Liberated Media, is a free,
+              Nodish, Media without the dish., is a free,
               non-commercial interface created and developed by Tejas Gafat.
               It is designed to help people discover and experience media that
               is made available through external sources.
@@ -46,7 +46,7 @@ export default function TermsPage() {
               2. Free and non-commercial use
             </h2>
             <p className="mt-3">
-              Muktkan currently operates without paid subscriptions and
+              Nodish currently operates without paid subscriptions and
               advertising. No payment is required to use the application.
             </p>
             <p className="mt-3">
@@ -61,12 +61,12 @@ export default function TermsPage() {
               3. Third-party content
             </h2>
             <p className="mt-3">
-              Muktkan does not claim ownership of movies, books, television
+              Nodish does not claim ownership of movies, books, television
               streams, artwork, metadata, trademarks, or other material
               belonging to third parties.
             </p>
             <p className="mt-3">
-              Muktkan acts as an interface and discovery layer over external
+              Nodish acts as an interface and discovery layer over external
               sources. The availability, licensing, copyright status, and
               continued accessibility of individual items may differ by source,
               work, and jurisdiction.
@@ -78,7 +78,7 @@ export default function TermsPage() {
               4. Your responsibility
             </h2>
             <p className="mt-3">
-              You are responsible for using Muktkan and any linked external
+              You are responsible for using Nodish and any linked external
               services in accordance with the laws and regulations applicable
               to you.
             </p>
@@ -95,14 +95,14 @@ export default function TermsPage() {
               5. External services
             </h2>
             <p className="mt-3">
-              Muktkan may use or link to services including Internet Archive,
+              Nodish may use or link to services including Internet Archive,
               Project Gutenberg, Gutendex, iptv-org, and third-party stream
-              providers. Those services operate independently from Muktkan and
+              providers. Those services operate independently from Nodish and
               may have their own terms, licenses, privacy policies, and
               restrictions.
             </p>
             <p className="mt-3">
-              Muktkan cannot guarantee that an external service, stream,
+              Nodish cannot guarantee that an external service, stream,
               download, book, or media item will remain available or unchanged.
             </p>
           </section>
@@ -112,13 +112,13 @@ export default function TermsPage() {
               6. Intellectual property
             </h2>
             <p className="mt-3">
-              Muktkan respects copyright, trademarks, licenses, and other
+              Nodish respects copyright, trademarks, licenses, and other
               intellectual-property rights. Source attribution is provided
-              where appropriate, and Muktkan does not intend to represent
+              where appropriate, and Nodish does not intend to represent
               third-party material as its own.
             </p>
             <p className="mt-3">
-              If you believe material presented through Muktkan infringes your
+              If you believe material presented through Nodish infringes your
               rights or is incorrectly described, please contact the project
               maintainer with enough information to identify the material and
               explain the concern.
@@ -130,7 +130,7 @@ export default function TermsPage() {
               7. Availability and reliability
             </h2>
             <p className="mt-3">
-              Muktkan is provided on an as-available basis. External APIs,
+              Nodish is provided on an as-available basis. External APIs,
               streams, metadata services, hosting infrastructure, network
               connections, and browser capabilities can fail or change without
               notice.
@@ -143,7 +143,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-foreground">
-              8. Changes to Muktkan
+              8. Changes to Nodish
             </h2>
             <p className="mt-3">
               Features, sources, interface elements, and technical
@@ -158,7 +158,7 @@ export default function TermsPage() {
               9. Acceptance
             </h2>
             <p className="mt-3">
-              By using Muktkan, you acknowledge that it is an independent,
+              By using Nodish, you acknowledge that it is an independent,
               non-commercial project providing an interface to external media
               sources and that your use of those sources remains subject to
               applicable laws and the relevant source&apos;s own terms.
@@ -167,7 +167,7 @@ export default function TermsPage() {
 
           <section className="border-t border-border/60 pt-8">
             <p>
-              These terms are intended to describe how Muktkan operates. They
+              These terms are intended to describe how Nodish operates. They
               are not a substitute for professional legal advice.
             </p>
           </section>

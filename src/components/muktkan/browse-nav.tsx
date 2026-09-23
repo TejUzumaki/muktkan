@@ -9,7 +9,7 @@ import { Film, BookOpen, Radio, Heart, History, Sparkles } from "lucide-react";
  * feel and improves discoverability of the three shelves + library.
  */
 const NAV = [
-  { id: "movies", label: "Films", desc: "Public-domain cinema", icon: Film },
+  { id: "movies", label: "Films", desc: "Cinema", icon: Film },
   { id: "books", label: "Books", desc: "Gutenberg literature", icon: BookOpen },
   { id: "live", label: "Live TV", desc: "Open IPTV channels", icon: Radio },
   { id: "library", label: "Library", desc: "Your saved titles", icon: Heart },

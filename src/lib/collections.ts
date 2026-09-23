@@ -40,7 +40,7 @@ export const COLLECTIONS: Collection[] = [
     title: "Gothic Horrors",
     subtitle: "Shadow, monster, dread",
     blurb:
-      "Public-domain horror is the genre that travels best across a century — vampires, phantoms, sleepwalkers and the walking dead, freed from colour and CGI.",
+      "Horror is the genre that travels best across a century — vampires, phantoms, sleepwalkers and the walking dead, freed from colour and CGI.",
     era: "1922–1968",
     resolve: () => [
       ...movieMedia.filter((m) => CURATED_MOVIES.find((c) => c.identifier === m.identifier)?.category === "horror"),
@@ -84,7 +84,7 @@ export const COLLECTIONS: Collection[] = [
     title: "The Detection Shelf",
     subtitle: "Holmes, vampires & unreliable governesses",
     blurb:
-      "Public-domain mystery is a strange, overlapping room — Sherlock Holmes shares it with Dracula (an epistolary mystery), Jekyll & Hyde, and Henry James's haunted governess.",
+      "Mystery is a strange, overlapping room — Sherlock Holmes shares it with Dracula (an epistolary mystery), Jekyll & Hyde, and Henry James's haunted governess.",
     era: "1886–1902",
     resolve: () =>
       bookMedia.filter((b) => CURATED_BOOKS.find((c) => c.gutenbergId === b.gutenbergId)?.category === "mystery"),

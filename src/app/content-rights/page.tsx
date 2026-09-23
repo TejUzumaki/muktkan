@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Content & Rights — Muktkan",
-  description: "Content, licensing, copyright, and rights information for Muktkan.",
+  title: "Content & Rights — Nodish",
+  description: "Content, licensing, copyright, and rights information for Nodish.",
 };
 
 export default function ContentRightsPage() {
@@ -13,28 +13,28 @@ export default function ContentRightsPage() {
           href="/"
           className="text-sm text-muted-foreground transition hover:text-foreground"
         >
-          ← Back to Muktkan
+          ← Back to Nodish
         </a>
 
         <header className="mt-10">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Muktkan
+            Nodish
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
             Content &amp; Rights
           </h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            How Muktkan handles third-party media and rights information.
+            How Nodish handles third-party media and rights information.
           </p>
         </header>
 
         <div className="mt-10 space-y-10 text-sm leading-7 text-muted-foreground">
           <section>
             <h2 className="text-lg font-semibold text-foreground">
-              Muktkan is an interface, not a rights holder
+              Nodish is an interface, not a rights holder
             </h2>
             <p className="mt-3">
-              Muktkan is a discovery and presentation layer for media made
+              Nodish is a discovery and presentation layer for media made
               available through external services. It does not claim ownership
               of third-party films, books, television channels, artwork,
               metadata, or trademarks.
@@ -47,7 +47,7 @@ export default function ContentRightsPage() {
             </h2>
             <p className="mt-3">
               A work may be public domain in one country while remaining
-              protected by copyright in another. Muktkan therefore avoids
+              protected by copyright in another. Nodish therefore avoids
               treating free accessibility as automatic proof of worldwide
               public-domain status.
             </p>
@@ -64,7 +64,7 @@ export default function ContentRightsPage() {
               Films and video
             </h2>
             <p className="mt-3">
-              Muktkan may surface films and video hosted by the Internet
+              Nodish may surface films and video hosted by the Internet
               Archive. Individual Internet Archive items can have different
               rights information and access conditions.
             </p>
@@ -79,7 +79,7 @@ export default function ContentRightsPage() {
               Books
             </h2>
             <p className="mt-3">
-              Muktkan may use Project Gutenberg and the Gutendex API to discover
+              Nodish may use Project Gutenberg and the Gutendex API to discover
               and present information about books and their available text
               formats.
             </p>
@@ -96,12 +96,12 @@ export default function ContentRightsPage() {
               Live television
             </h2>
             <p className="mt-3">
-              Muktkan may use channel and stream information from iptv-org.
+              Nodish may use channel and stream information from iptv-org.
               These are third-party streams and should not automatically be
               described as public-domain media.
             </p>
             <p className="mt-3">
-              Muktkan does not operate or control the underlying television
+              Nodish does not operate or control the underlying television
               broadcasters or stream servers. Availability and licensing may
               vary by channel, provider, and jurisdiction.
             </p>
@@ -112,7 +112,7 @@ export default function ContentRightsPage() {
               Rights information categories
             </h2>
             <p className="mt-3">
-              Where practical, Muktkan may distinguish between different kinds
+              Where practical, Nodish may distinguish between different kinds
               of source material rather than applying a single blanket label.
               These categories can include:
             </p>
@@ -130,13 +130,13 @@ export default function ContentRightsPage() {
               Copyright concerns
             </h2>
             <p className="mt-3">
-              If you believe that material presented through Muktkan infringes
+              If you believe that material presented through Nodish infringes
               your copyright or other rights, please provide the project
               maintainer with enough information to identify the affected item,
               the relevant source, and the basis of your claim.
             </p>
             <p className="mt-3">
-              Muktkan can review and, where appropriate, correct metadata,
+              Nodish can review and, where appropriate, correct metadata,
               remove an interface reference, or investigate the underlying
               source.
             </p>
@@ -144,7 +144,7 @@ export default function ContentRightsPage() {
 
           <section className="border-t border-border/60 pt-8">
             <p>
-              Muktkan aims to make legally accessible media easier to discover
+              NO-DISH aims to make media from external sources easier to discover
               while avoiding claims about rights that cannot be established
               from the available source information.
             </p>

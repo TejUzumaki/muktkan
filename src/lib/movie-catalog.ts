@@ -1,6 +1,6 @@
 import type { MovieMedia } from "./types";
 
-// A curated catalog of genuine public-domain feature films preserved on the
+// A curated catalog of feature films discovered through external sources preserved on the
 // Internet Archive. These identifiers are stable, well-known archive.org
 // items. Used as the reliable backbone of the Movies shelf (live archive.org
 // search is attempted at request time and merged on top when reachable).

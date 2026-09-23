@@ -12,7 +12,7 @@ import type { Media } from "@/lib/types";
 /**
  * "Tonight in the Hall" — a single editorial spotlight pick of the day,
  * deterministically chosen from the catalog so it's stable per day per user.
- * Premium magazine-style framing that elevates a single public-domain work.
+ * Premium magazine-style framing that elevates a single selected work.
  */
 export function SpotlightRail() {
   const movies = useShelf("movie", "featured", 8);

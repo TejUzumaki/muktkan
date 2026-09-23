@@ -1,5 +1,5 @@
 // Rotating editorial "Curator's notes" — short essays that give the Hall a
-// voice and explain why public-domain media deserves a premium presentation.
+// voice and explain why selected media deserves a premium presentation.
 // Deterministically selected by day-of-year so each day has a stable note.
 
 export interface CuratorNote {
@@ -28,7 +28,7 @@ export const CURATOR_NOTES: CuratorNote[] = [
     id: "gutenberg",
     title: "Why Gutenberg still matters",
     body:
-      "Project Gutenberg began in 1971, before the web, before the personal computer was a household object. It exists because one man believed that a book entering the public domain should enter it for everyone, instantly, for free. Fifty years on, that conviction still holds. The shelf you're reading from is the proof.",
+      "Project Gutenberg began in 1971, before the web, before the personal computer was a household object. Its long-running catalog makes classic literature easier to discover and read through a dedicated digital collection.",
     signoff: "The Hall",
   },
   {
@@ -42,7 +42,7 @@ export const CURATOR_NOTES: CuratorNote[] = [
     id: "value",
     title: "On valuing free things",
     body:
-      "There is a peculiar modern instinct to treat anything free as worthless. We built Muktkan to push back against that. A premium frame around a public-domain film does not cheapen the film — it argues that the film was always worth the frame, and that we were just too cheap to give it one.",
+      "There is a peculiar modern instinct to treat freely accessible media as disposable. NO-DISH pushes back against that instinct by giving selected works a considered, premium presentation and making discovery feel intentional.",
     signoff: "The Hall",
   },
   {
@@ -54,9 +54,9 @@ export const CURATOR_NOTES: CuratorNote[] = [
   },
   {
     id: "legality",
-    title: "100% legal, by design",
+    title: "Rights-aware, by design",
     body:
-      "We did not license anything for Muktkan, because we did not need to. Every work on this shelf has entered the public domain through the natural expiry of copyright, or was released to it by its author. You will find no pirated premieres here, no leaked screeners — only the slow, lawful, growing commons.",
+      "NO-DISH does not make a blanket rights determination for every item it presents. Media is discovered from external sources, and rights status can depend on the source record, the applicable licence, and the jurisdiction in which the media is accessed. Check the source information and rights details for the item you choose.",
     signoff: "The Hall",
   },
 ];

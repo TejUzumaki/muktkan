@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { MovieMedia } from "@/lib/types";
 import { CURATED_MOVIES, curatedToMedia } from "@/lib/movie-catalog";
 
-// Muktkan Movies shelf. Backbone: a curated catalog of genuine public-domain
+// NO-DISH Movies shelf. Backbone: a curated catalog of source-provided
 // films on the Internet Archive. Enriched at request time with a live
 // archive.org advancedsearch call (short timeout) when the host is reachable.
 
@@ -35,7 +35,7 @@ async function searchArchive(query: string, rows: number, timeoutMs = 5000) {
       signal: ctrl.signal,
       headers: {
         Accept: "application/json",
-        "User-Agent": "Muktkan/1.0 (public-domain media browser)",
+        "User-Agent": "NO-DISH/1.0 (media discovery browser)",
       },
     });
     if (!res.ok) return [];
@@ -85,7 +85,7 @@ export async function GET(req: NextRequest) {
           kind: "movie",
           identifier: id,
           title: String(d.title),
-          description: cleanDescription(d.description) || "A public-domain film preserved by the Internet Archive.",
+          description: cleanDescription(d.description) || "A film preserved and made available through the Internet Archive.",
           poster,
           backdrop: poster,
           year: d.year ? String(d.year) : undefined,

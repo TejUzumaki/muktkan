@@ -224,9 +224,9 @@ export function HeroFocusCarousel({ items }: { items: Media[] }) {
                     <span className="brand-text">{kindLabel(focused.kind)}</span>
                     <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
                     <span>{focused.meta?.[0] ?? "Featured"}</span>
-                    {/* Public-domain verified badge */}
+                    {/* Source information badge */}
                     <span className="inline-flex items-center gap-1 rounded-full border border-[var(--brand)]/30 bg-[var(--brand)]/10 px-2 py-0.5 text-[10px] font-semibold normal-case tracking-normal brand-text">
-                      <BadgeCheck className="h-3 w-3" /> Public Domain
+                      <BadgeCheck className="h-3 w-3" /> Source information
                     </span>
                   </div>
                   <h1 className="text-balance text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
@@ -244,7 +244,7 @@ export function HeroFocusCarousel({ items }: { items: Media[] }) {
                     {focused.year && <span className="h-1 w-1 rounded-full bg-muted-foreground/40" aria-hidden />}
                     <span>{sourceLabel(focused.kind)}</span>
                     <span className="h-1 w-1 rounded-full bg-muted-foreground/40" aria-hidden />
-                    <span>100% legal · free to keep</span>
+                    <span>Rights vary by source and jurisdiction</span>
                   </div>
                   <p className="mt-4 line-clamp-3 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
                     {focused.description}

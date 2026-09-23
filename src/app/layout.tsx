@@ -14,12 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Muktkan — The Hall of Liberated Media",
+  title: "Nodish — Media without the dish.",
   description:
-    "Muktkan (मुक्त 館) is a premium interface for discovering legally accessible films, books, and live channels from external sources.",
+    "NO-DISH is a premium interface for discovering films, books, and live channels from external sources. Rights and availability vary by source, item, and jurisdiction.",
   keywords: [
-    "Muktkan",
-    "public domain",
+    "Nodish",
+    "open media",
     "Internet Archive",
     "Project Gutenberg",
     "IPTV",
@@ -34,10 +34,10 @@ export const metadata: Metadata = {
     apple: "/muktkan-icon.svg",
   },
   openGraph: {
-    title: "Muktkan — The Hall of Liberated Media",
+    title: "Nodish — Media without the dish.",
     description:
-      "A premium interface for discovering legally accessible films, books and live channels from external sources.",
-    siteName: "Muktkan",
+      "A premium interface for discovering films, books and live channels from external sources. Rights and availability vary by source, item and jurisdiction.",
+    siteName: "Nodish",
     type: "website",
   },
 };

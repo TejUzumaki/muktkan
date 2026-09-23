@@ -5,8 +5,8 @@ import { CURATED_BOOKS } from "@/lib/book-catalog";
 import { Film, BookOpen, Radio, ShieldCheck } from "lucide-react";
 
 /**
- * "Hall stats" — a compact strip showing the live scale of the Muktkan
- * catalog: films, books, live TV channels, all public domain. Reinforces the
+ * "Hall stats" — a compact strip showing the live scale of the Nodish
+ * catalog: films, books, live TV channels, source-based catalog. Reinforces the
  * app's value proposition (scale + legality) in one premium glance.
  *
  * Films/Books counts come from the curated catalogs (instant). The Live TV
@@ -19,10 +19,10 @@ export function HallStats() {
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6">
       <div className="grid grid-cols-2 gap-3 rounded-2xl border border-border/50 glass p-4 sm:grid-cols-4 sm:p-5">
-        <Stat icon={<Film className="h-4 w-4" />} value={filmCount} label="Public-domain films" />
+        <Stat icon={<Film className="h-4 w-4" />} value={filmCount} label="Films in the catalog" />
         <Stat icon={<BookOpen className="h-4 w-4" />} value={bookCount} label="Gutenberg books" />
         <Stat icon={<Radio className="h-4 w-4" />} value={"24+"} label="Live TV channels" />
-        <Stat icon={<ShieldCheck className="h-4 w-4" />} value={"100%"} label="Legal & free to keep" highlight />
+        <Stat icon={<ShieldCheck className="h-4 w-4" />} value={"Open"} label="Source-based access" highlight />
       </div>
     </section>
   );

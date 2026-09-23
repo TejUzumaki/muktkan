@@ -240,7 +240,7 @@ function FabButton({
 }
 
 function kindLabel(k: "movie" | "book" | "tv") {
-  return k === "movie" ? "Public-domain film" : k === "book" ? "Public-domain book" : "Live IPTV channel";
+  return k === "movie" ? "Film" : k === "book" ? "Book" : "Live IPTV channel";
 }
 function sourceLabel(k: "movie" | "book" | "tv") {
   return k === "movie" ? "Internet Archive" : k === "book" ? "Project Gutenberg" : "iptv-org";

@@ -173,9 +173,9 @@ export function SearchOverlay() {
                     <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-[var(--brand)]/12 brand-text">
                       <Search className="h-6 w-6" />
                     </div>
-                    <p className="text-sm font-medium">Search the public domain</p>
+                    <p className="text-sm font-medium">Search the collection</p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      Films from the Internet Archive, books from Project Gutenberg — all legal, all free to keep.
+                      Films from the Internet Archive and books from Project Gutenberg. Rights and availability depend on the source and applicable jurisdiction.
                     </p>
                   </div>
                 </div>

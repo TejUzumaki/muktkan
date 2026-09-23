@@ -1,6 +1,6 @@
 "use client";
 
-import { MuktkanMark } from "./onboarding";
+import { NodishMark } from "./onboarding";
 import {
   Film,
   BookOpen,
@@ -28,20 +28,20 @@ export function Footer() {
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-sm">
             <div className="flex items-center gap-2.5">
-              <MuktkanMark size={30} />
+              <NodishMark size={30} />
 
               <div className="leading-tight">
-                <p className="text-base font-semibold tracking-tight">Muktkan</p>
+                <p className="text-base font-semibold tracking-tight">Nodish</p>
                 <p className="-mt-0.5 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  मुक्त 館
+                  Nodish
                 </p>
               </div>
             </div>
 
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              The Hall of Liberated Media. A premium interface for discovering
-              legally accessible films, books and live channels from external
-              sources.
+              Media without the dish. A premium interface for discovering
+              films, books and live channels from external sources.
+              Rights and availability vary by source, item and jurisdiction.
             </p>
 
             <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--brand)]/30 bg-[var(--brand)]/10 px-3 py-1.5 text-xs font-medium brand-text">
@@ -144,10 +144,24 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col gap-4 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 border-t border-border/60 pt-6">
+        <p className="text-xs text-muted-foreground">
+          Created by{" "}
+          <a
+            href="https://github.com/TejUzumaki"
+            target="_blank"
+            rel="noreferrer"
+            className="text-foreground underline-offset-4 hover:underline"
+          >
+            @TejUzumaki
+          </a>
+        </p>
+      </div>
+
+      <div className="mt-8 flex flex-col gap-4 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p>
-              © {new Date().getFullYear()} Muktkan · A cultural preservation
+              © {new Date().getFullYear()} Nodish · A cultural preservation
               interface.
             </p>
 
@@ -160,7 +174,7 @@ export function Footer() {
           <div className="flex items-center gap-4">
             <p className="flex items-center gap-1.5">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--brand)]" />
-              No subscription. No tracking. No ads.
+              An independent discovery interface for media from external sources.
             </p>
 
             <button

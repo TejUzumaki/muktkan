@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sources & Attribution — Muktkan",
-  description: "Sources, APIs, and third-party projects used by Muktkan.",
+  title: "Sources & Attribution — Nodish",
+  description: "Sources, APIs, and third-party projects used by Nodish.",
 };
 
 const sources = [
@@ -11,35 +11,35 @@ const sources = [
     role: "Film and video source",
     url: "https://archive.org/",
     description:
-      "Muktkan may use publicly accessible Internet Archive items for film and video discovery and playback. Rights and access conditions are determined at the individual item level.",
+      "Nodish may use publicly accessible Internet Archive items for film and video discovery and playback. Rights and access conditions are determined at the individual item level.",
   },
   {
     name: "Project Gutenberg",
     role: "Electronic book source",
     url: "https://www.gutenberg.org/",
     description:
-      "Muktkan uses Project Gutenberg as a source for discovering and presenting information about ebooks and their available formats. Users should consult the rights information provided with each ebook.",
+      "Nodish uses Project Gutenberg as a source for discovering and presenting information about ebooks and their available formats. Users should consult the rights information provided with each ebook.",
   },
   {
     name: "Gutendex",
     role: "Book metadata API",
     url: "https://gutendex.com/",
     description:
-      "Muktkan uses the Gutendex API to retrieve structured metadata about Project Gutenberg books.",
+      "Nodish uses the Gutendex API to retrieve structured metadata about Project Gutenberg books.",
   },
   {
     name: "iptv-org",
     role: "Live TV channel and stream directory",
     url: "https://iptv-org.github.io/",
     description:
-      "Muktkan may use channel and stream information maintained by iptv-org. The underlying broadcasters and stream servers are third-party services and are not operated by Muktkan.",
+      "Nodish may use channel and stream information maintained by iptv-org. The underlying broadcasters and stream servers are third-party services and are not operated by Nodish.",
   },
   {
     name: "Vercel",
     role: "Application hosting and deployment",
     url: "https://vercel.com/",
     description:
-      "Muktkan is deployed using Vercel infrastructure.",
+      "Nodish is deployed using Vercel infrastructure.",
   },
 ];
 
@@ -51,18 +51,18 @@ export default function SourcesPage() {
           href="/"
           className="text-sm text-muted-foreground transition hover:text-foreground"
         >
-          ← Back to Muktkan
+          ← Back to Nodish
         </a>
 
         <header className="mt-10">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Muktkan
+            Nodish
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
             Sources &amp; Attribution
           </h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            The external projects and infrastructure that help power Muktkan.
+            The external projects and infrastructure that help power Nodish.
           </p>
         </header>
 
@@ -102,7 +102,7 @@ export default function SourcesPage() {
             About attribution
           </h2>
           <p className="mt-3">
-            Muktkan is an independent project and is not affiliated with,
+            Nodish is an independent project and is not affiliated with,
             endorsed by, or operated by the organizations and projects listed
             above unless explicitly stated otherwise.
           </p>
@@ -118,7 +118,7 @@ export default function SourcesPage() {
             Created and developed by
           </h2>
           <p className="mt-3">
-            Tejas Gafat — independent developer and creator of Muktkan.
+            Tejas Gafat — independent developer and creator of Nodish.
           </p>
         </section>
       </div>
