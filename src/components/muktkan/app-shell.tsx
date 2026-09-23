@@ -1,11 +1,10 @@
 "use client";
 
-import { useMemo, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import { useOnboarding } from "@/lib/store";
 import { useViewer } from "@/lib/viewer-store";
 import { useShelf } from "@/lib/use-shelf";
 import { useHotkeys } from "@/lib/use-hotkeys";
-import type { Media } from "@/lib/types";
 import { Onboarding } from "./onboarding";
 import { TopBar } from "./topbar";
 import { HeroFocusCarousel } from "./hero-focus-carousel";
@@ -121,28 +120,20 @@ function ThemeAndHome({
 }
 
 function Home() {
-  // Featured hero: interleave top films + top books.
+  // Phase 2: the hero is intentionally movie-only.
+  // Books and TV remain independent sections below.
   const movies = useShelf("movie", "featured", 8);
-  const books = useShelf("book", "popular", 8);
   const favorites = useOnboarding((s) => s.favorites);
 
-  const featured = useMemo(() => {
-    const out: Media[] = [];
-    const max = Math.max(movies.items.length, books.items.length);
-    for (let i = 0; i < max; i++) {
-      if (movies.items[i]) out.push(movies.items[i]);
-      if (books.items[i]) out.push(books.items[i]);
-    }
-    return out;
-  }, [movies.items, books.items]);
+  const movieHeroItems = movies.items;
 
   return (
     <div className="flex min-h-screen flex-col bg-background rise-in">
       <TopBar />
       <main className="flex-1">
         <div id="top" />
-        {featured.length > 0 ? (
-          <HeroFocusCarousel items={featured} />
+        {movieHeroItems.length > 0 ? (
+          <HeroFocusCarousel items={movieHeroItems} />
         ) : (
           <div className="grid h-[78vh] min-h-[560px] place-items-center">
             <div className="h-10 w-10 animate-spin rounded-full border-2 border-[var(--brand)] border-t-transparent" />
