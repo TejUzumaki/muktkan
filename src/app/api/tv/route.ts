@@ -105,7 +105,7 @@ function hash(s: string): number {
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const category = sp.get("category") ?? "all";
-  const limit = Math.min(Number(sp.get("limit") ?? 36), 120);
+  const limit = Math.min(Number(sp.get("limit") ?? 36), 500);
 
   try {
     let channels = await fetchAll();

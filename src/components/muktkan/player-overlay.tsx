@@ -299,7 +299,7 @@ function BookReader({ media }: { media: BookMedia }) {
   );
 }
 
-function LiveTvPlayer({ media }: { media: TvChannel }) {
+export function LiveTvPlayer({ media }: { media: TvChannel }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [state, setState] = useState<"loading" | "playing" | "error">("loading");
 
