@@ -43,7 +43,7 @@ export function TopBar() {
           {[
             { href: "#movies", label: "Films" },
             { href: "#books", label: "Books" },
-            { href: "#live", label: "Live TV" },
+            { href: "/live-tv", label: "Live TV" },
           ].map((l) => (
             <a
               key={l.href}

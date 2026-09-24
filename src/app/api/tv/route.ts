@@ -6,10 +6,11 @@ import type { TvChannel } from "@/lib/types";
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
-const SOURCES: { url: string; label: string }[] = [
-  { url: "https://iptv-org.github.io/iptv/countries/in.m3u", label: "India" },
-  { url: "https://iptv-org.github.io/iptv/countries/us.m3u", label: "United States" },
-  { url: "https://iptv-org.github.io/iptv/countries/uk.m3u", label: "United Kingdom" },
+const SOURCES: { url: string; label: string; region?: string }[] = [
+  { url: "https://iptv-org.github.io/iptv/subdivisions/in-mh.m3u", label: "Maharashtra", region: "Maharashtra" },
+  { url: "https://iptv-org.github.io/iptv/countries/in.m3u", label: "India", region: "India" },
+  { url: "https://iptv-org.github.io/iptv/countries/uk.m3u", label: "United Kingdom", region: "United Kingdom" },
+  { url: "https://iptv-org.github.io/iptv/countries/us.m3u", label: "United States", region: "United States" },
 ];
 
 const CATEGORY_FILTERS: Record<string, (c: TvChannel) => boolean> = {
@@ -26,6 +27,7 @@ interface ExtInf {
   logo?: string;
   group?: string;
   country?: string;
+  language?: string;
 }
 
 function parseAttr(line: string, key: string): string | undefined {
@@ -89,7 +91,12 @@ async function fetchAll(): Promise<TvChannel[]> {
         streamUrl: url,
         country: ext.country || source,
         group: ext.group || "General",
-        meta: [ext.group || "Live", source],
+        meta: [
+          ext.group || "Live",
+          ext.language || "Unknown language",
+          source,
+        ],
+
       });
     }
   }
@@ -105,15 +112,57 @@ function hash(s: string): number {
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const category = sp.get("category") ?? "all";
-  const limit = Math.min(Number(sp.get("limit") ?? 36), 500);
+  const limit = Math.min(Number(sp.get("limit") ?? 500), 500);
 
   try {
     let channels = await fetchAll();
     if (category !== "all" && CATEGORY_FILTERS[category]) {
       channels = channels.filter(CATEGORY_FILTERS[category]);
     }
-    channels.sort((a, b) => (b.logo ? 1 : 0) - (a.logo ? 1 : 0));
-    channels = channels.slice(0, limit);
+    const languageOf = (c: TvChannel) =>
+      String(c.meta?.[1] || "").toLowerCase();
+
+    const groupOf = (c: TvChannel) =>
+      String(c.group || "").toLowerCase();
+
+    const titleOf = (c: TvChannel) =>
+      String(c.title || "").toLowerCase();
+
+    const isSports = (c: TvChannel) =>
+      /sport|sports|football|cricket|tennis|f1|formula/i.test(
+        `${groupOf(c)} ${titleOf(c)}`
+      );
+
+    const isMaharashtra = (c: TvChannel) =>
+      /maharashtra|marathi|mh/i.test(
+        `${String(c.country || "")} ${String(c.description || "")} ${titleOf(c)} ${languageOf(c)}`
+      );
+
+    const isIndia = (c: TvChannel) =>
+      /india|in$/i.test(String(c.country || "")) ||
+      /india|bharat/i.test(String(c.description || ""));
+
+    const score = (c: TvChannel) => {
+      let value = 0;
+
+      // Regional Indian discovery comes first.
+      if (isMaharashtra(c)) value += 1000;
+      else if (isIndia(c)) value += 700;
+
+      // Sports is intentionally surfaced prominently.
+      if (isSports(c)) value += 180;
+
+      // Real logos are preferable to empty entries.
+      if (c.logo) value += 40;
+
+      // Stable alphabetical fallback.
+      value -= titleOf(c).charCodeAt(0) / 10000;
+
+      return value;
+    };
+
+    channels.sort((a, b) => score(b) - score(a));
+    channels = channels.slice(0, Math.min(limit, 500));
 
     return NextResponse.json({ items: channels, total: channels.length });
   } catch (e) {

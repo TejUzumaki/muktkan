@@ -69,20 +69,7 @@ const BOOKS_RAIL: RailConfig = {
   ],
 };
 
-const TV_RAIL: RailConfig = {
-  kind: "tv",
-  title: "Live TV",
-  subtitle: "Open IPTV channels from the iptv-org index",
-  categories: [
-    { id: "all", label: "All" },
-    { id: "news", label: "News" },
-    { id: "movies", label: "Movies" },
-    { id: "entertainment", label: "Entertainment" },
-    { id: "sports", label: "Sports" },
-    { id: "music", label: "Music" },
-    { id: "kids", label: "Kids" },
-  ],
-};
+
 
 export function AppShell() {
   const onboarded = useOnboarding((s) => s.onboarded);
@@ -96,7 +83,6 @@ export function AppShell() {
     <>
       <ScrollProgress />
       <ThemeAndHome onboarded={onboarded} onboardingOpen={onboardingOpen} />
-      <TvExperience />
       <DetailsPanel />
       <PlayerOverlay />
       <CollectionViewer />
@@ -155,9 +141,6 @@ function Home() {
             <CategoryRail config={BOOKS_RAIL} />
           </div>
           <CollectionsRail />
-          <div id="live">
-            <CategoryRail config={TV_RAIL} />
-          </div>
           {favorites.length > 0 && <LibrarySection />}
         </div>
       </main>
@@ -191,7 +174,7 @@ function LibrarySection() {
   );
 }
 
-function TvExperience() {
+export function TvExperience() {
   const tvMode = useViewer((s) => s.tvMode);
   const channel = useViewer((s) => s.tvChannel);
   const closeTv = useViewer((s) => s.closeTv);

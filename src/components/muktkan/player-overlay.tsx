@@ -301,20 +301,31 @@ function BookReader({ media }: { media: BookMedia }) {
 
 export function LiveTvPlayer({ media }: { media: TvChannel }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const playerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<"loading" | "playing" | "error">("loading");
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     let hls: any = null;
     const video = videoRef.current;
     if (!video) return;
+
     setState("loading");
+
     const url = media.streamUrl;
     const isHls = /\.m3u8(\?|$)/i.test(url) || url.includes(".m3u8");
 
     const onPlaying = () => setState("playing");
     const onError = () => setState("error");
+
     video.addEventListener("playing", onPlaying);
     video.addEventListener("error", onError);
+
+    const syncFullscreenState = () => {
+      setIsFullscreen(document.fullscreenElement === playerRef.current);
+    };
+
+    document.addEventListener("fullscreenchange", syncFullscreenState);
 
     (async () => {
       try {
@@ -326,13 +337,20 @@ export function LiveTvPlayer({ media }: { media: TvChannel }) {
           } else {
             const mod = await import("hls.js");
             const Hls = mod.default;
+
             if (Hls.isSupported()) {
-              hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+              hls = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+              });
+
               hls.loadSource(url);
               hls.attachMedia(video);
+
               hls.on(Hls.Events.ERROR, (_e: any, data: any) => {
                 if (data.fatal) setState("error");
               });
+
               await video.play().catch(() => {});
             } else {
               setState("error");
@@ -350,12 +368,89 @@ export function LiveTvPlayer({ media }: { media: TvChannel }) {
     return () => {
       video.removeEventListener("playing", onPlaying);
       video.removeEventListener("error", onError);
+      document.removeEventListener("fullscreenchange", syncFullscreenState);
+
       if (hls) hls.destroy();
+
+      if (document.fullscreenElement === playerRef.current) {
+        void document.exitFullscreen().catch(() => {});
+      }
+
+      try {
+        const orientation = screen.orientation as ScreenOrientation & {
+          unlock?: () => void;
+        };
+
+        if (typeof orientation.unlock === "function") {
+          orientation.unlock();
+        }
+      } catch {
+        // Orientation cleanup is best-effort.
+      }
     };
   }, [media.streamUrl]);
 
+  const requestLandscape = async () => {
+    try {
+      const orientation = screen.orientation as ScreenOrientation & {
+        lock?: (orientation: string) => Promise<void>;
+      };
+
+      if (typeof orientation.lock === "function") {
+        await orientation.lock("landscape");
+      }
+    } catch {
+      // Orientation locking is not supported or permitted by this browser.
+    }
+  };
+
+  const releaseLandscape = async () => {
+    try {
+      const orientation = screen.orientation as ScreenOrientation & {
+        unlock?: () => void;
+      };
+
+      if (typeof orientation.unlock === "function") {
+        orientation.unlock();
+      }
+    } catch {
+      // Some browsers do not expose orientation unlock.
+    }
+  };
+
+  const toggleFullscreen = async () => {
+    const player = playerRef.current;
+    if (!player) return;
+
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        await releaseLandscape();
+        return;
+      }
+
+      if (player.requestFullscreen) {
+        await player.requestFullscreen();
+        await requestLandscape();
+        return;
+      }
+
+      const video = videoRef.current;
+      const legacyVideo = video as HTMLVideoElement & {
+        webkitEnterFullscreen?: () => void;
+      };
+
+      legacyVideo.webkitEnterFullscreen?.();
+    } catch {
+      // Fullscreen can be rejected by browser/device policy.
+    }
+  };
+
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-black">
+    <div
+      ref={playerRef}
+      className="absolute inset-0 flex items-center justify-center bg-black"
+    >
       <video
         ref={videoRef}
         className="h-full w-full bg-black object-contain"
@@ -364,25 +459,43 @@ export function LiveTvPlayer({ media }: { media: TvChannel }) {
         autoPlay
         muted={false}
       />
+
       {state === "loading" && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/80">
           <Loader2 className="h-8 w-8 animate-spin" />
           <p className="text-sm">Tuning into {media.title}…</p>
         </div>
       )}
+
       {state === "error" && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center text-white">
           <AlertTriangle className="h-9 w-9 text-amber-400" />
           <p className="max-w-sm text-sm text-white/80">
             This live stream couldn't be reached right now. IPTV channels rotate often — try another channel from the Live TV shelf.
           </p>
-          <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">{media.country}</span>
+          <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">
+            {media.country}
+          </span>
         </div>
       )}
+
       {state === "playing" && (
-        <div className="pointer-events-none absolute left-4 top-16 flex items-center gap-2 rounded-full bg-red-600/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white shadow">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" /> Live
-        </div>
+        <>
+          <div className="pointer-events-none absolute left-4 top-16 flex items-center gap-2 rounded-full bg-red-600/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white shadow">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+            Live
+          </div>
+
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            className="absolute bottom-4 right-4 z-20 grid h-10 min-w-10 place-items-center rounded-full border border-white/15 bg-black/65 px-3 text-[11px] font-semibold uppercase tracking-wider text-white backdrop-blur transition hover:bg-black/85"
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+          >
+            {isFullscreen ? "Exit" : "Fullscreen"}
+          </button>
+        </>
       )}
     </div>
   );
