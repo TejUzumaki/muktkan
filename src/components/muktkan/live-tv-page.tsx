@@ -16,7 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { Html, Line, OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
@@ -75,53 +75,94 @@ function ChannelLogo({
 function LastWatchedCard({
   channel,
   onOpen,
+  manage,
+  onRemove,
 }: {
   channel: TvChannel;
   onOpen: (channel: TvChannel) => void;
+  manage: boolean;
+  onRemove: (id: string) => void;
 }) {
+  const [artworkFailed, setArtworkFailed] = useState(false);
+
+  const initial =
+    channel.title
+      .replace(/^The\\s+|^A\\s+|^An\\s+/i, "")
+      .trim()
+      .charAt(0)
+      .toUpperCase() || "T";
+
   return (
-    <motion.button
-      type="button"
+    <motion.div
       whileHover={{ y: -4 }}
       whileTap={{ scale: 0.985 }}
-      onClick={() => onOpen(channel)}
       className="group relative w-[78vw] max-w-[340px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] text-left transition-colors hover:border-[var(--brand)]/40 hover:bg-white/[0.055]"
     >
-      <div className="relative aspect-[16/8] overflow-hidden bg-black">
-        {channel.logo ? (
-          <img
-            src={channel.logo}
-            alt=""
-            draggable={false}
-            className="absolute inset-0 h-full w-full object-contain p-8 opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
-            onError={(event) => {
-              event.currentTarget.style.display = "none";
-            }}
-          />
-        ) : (
-          <div className="absolute inset-0 grid place-items-center">
-            <ChannelLogo channel={channel} size="large" />
+      <button
+        type="button"
+        onClick={() => {
+          if (!manage) onOpen(channel);
+        }}
+        className="block w-full text-left"
+        aria-label={
+          manage
+            ? `${channel.title} history item`
+            : `Watch ${channel.title}`
+        }
+      >
+        <div className="relative aspect-[16/8] overflow-hidden bg-black">
+          {!artworkFailed && channel.logo ? (
+            <img
+              src={channel.logo}
+              alt=""
+              draggable={false}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-contain p-8 opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
+              onError={() => setArtworkFailed(true)}
+            />
+          ) : (
+            <div className="absolute inset-0 grid place-items-center">
+              <div className="grid h-20 w-20 place-items-center rounded-full border border-white/10 bg-white/[0.045] text-2xl font-semibold text-white/65 shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+                {initial}
+              </div>
+            </div>
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+          <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-white">
+                {channel.title}
+              </p>
+              <p className="mt-0.5 truncate text-[11px] text-white/55">
+                {channel.group || channel.country || "Live channel"}
+              </p>
+            </div>
+
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--brand)] text-[var(--brand-foreground)] opacity-80 transition group-hover:opacity-100">
+              <Play className="h-3.5 w-3.5 fill-current" />
+            </span>
           </div>
-        )}
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-        <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between gap-3">
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-white">
-              {channel.title}
-            </p>
-            <p className="mt-0.5 truncate text-[11px] text-white/55">
-              {channel.group || channel.country || "Live channel"}
-            </p>
-          </div>
-
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--brand)] text-[var(--brand-foreground)] opacity-80 transition group-hover:opacity-100">
-            <Play className="h-3.5 w-3.5 fill-current" />
-          </span>
         </div>
-      </div>
-    </motion.button>
+      </button>
+
+      {manage && (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onRemove(channel.id);
+          }}
+          className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-black/65 text-white/60 backdrop-blur-md transition hover:border-red-400/40 hover:bg-black/85 hover:text-white"
+          aria-label={`Remove ${channel.title} from recently watched`}
+          title="Remove from recently watched"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      )}
+    </motion.div>
   );
 }
 
@@ -228,11 +269,8 @@ function buildUniversePoints(channels: TvChannel[]): UniversePoint[] {
 }
 
 function UniverseStars() {
-  const pointsRef = useRef<THREE.Points>(null);
-  const materialRef = useRef<THREE.PointsMaterial>(null);
-
   const { positions, sizes } = useMemo(() => {
-    const count = 2200;
+    const count = 1400;
     const positions = new Float32Array(count * 3);
     const sizes = new Float32Array(count);
 
@@ -272,28 +310,8 @@ function UniverseStars() {
     return { positions, sizes };
   }, []);
 
-  useFrame(({ clock }) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y =
-        clock.elapsedTime * 0.004;
-
-      pointsRef.current.rotation.x =
-        Math.sin(clock.elapsedTime * 0.035) * 0.018;
-    }
-
-    if (materialRef.current) {
-      /*
-       * Gentle global breathing gives the impression of tiny distant
-       * points sparkling without turning the field into a flashy effect.
-       */
-      materialRef.current.opacity =
-        0.52 +
-        Math.sin(clock.elapsedTime * 0.75) * 0.08;
-    }
-  });
-
   return (
-    <points ref={pointsRef}>
+    <points>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
@@ -306,7 +324,6 @@ function UniverseStars() {
       </bufferGeometry>
 
       <pointsMaterial
-        ref={materialRef}
         color="#ffffff"
         size={0.085}
         sizeAttenuation
@@ -337,13 +354,12 @@ function UniverseNode({
     >
       <Html
         center
-        transform
-        sprite
         distanceFactor={14}
         zIndexRange={[10, 0]}
         style={{
           pointerEvents: "auto",
           userSelect: "none",
+          transformOrigin: "center center",
         }}
       >
         <button
@@ -903,9 +919,10 @@ function ChannelUniverse({
         <div className="relative h-[min(82vw,720px)] min-h-[400px] overflow-hidden rounded-[1.8rem] touch-none select-none">
           <div className="absolute inset-0">
             <Canvas
-              dpr={[1, 1.5]}
+              frameloop="demand"
+              dpr={[1, 1.25]}
               gl={{
-                antialias: true,
+                antialias: false,
                 alpha: true,
                 powerPreference: "high-performance",
               }}
@@ -997,8 +1014,15 @@ export function LiveTvPage() {
   const router = useRouter();
   const tvShelf = useShelf("tv", "all", 500);
   const recentlyViewed = useOnboarding((state) => state.recentlyViewed);
+  const removeRecentlyViewed = useOnboarding(
+    (state) => state.removeRecentlyViewed
+  );
+  const clearRecentlyViewed = useOnboarding(
+    (state) => state.clearRecentlyViewed
+  );
   const openTv = useViewer((state) => state.openTv);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isHistoryManageOpen, setIsHistoryManageOpen] = useState(false);
 
   const channels = useMemo(
     () =>
@@ -1108,17 +1132,58 @@ export function LiveTvPage() {
                   </h2>
                 </div>
 
-                <span className="text-[11px] text-white/30">
-                  {lastWatched.length} recent
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] text-white/30">
+                    {lastWatched.length} recent
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setIsHistoryManageOpen((value) => !value)
+                    }
+                    className={[
+                      "rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] transition",
+                      isHistoryManageOpen
+                        ? "border-[var(--brand)]/40 bg-[var(--brand)]/10 text-[var(--brand)]"
+                        : "border-white/10 bg-white/[0.025] text-white/40 hover:border-white/20 hover:text-white",
+                    ].join(" ")}
+                  >
+                    {isHistoryManageOpen ? "Done" : "Manage"}
+                  </button>
+                </div>
               </div>
 
+              {isHistoryManageOpen && (
+                <div className="mb-4 flex items-center justify-between gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.025] px-4 py-3">
+                  <p className="text-[11px] leading-5 text-white/40">
+                    Remove channels from your local viewing history.
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      clearRecentlyViewed();
+                      setIsHistoryManageOpen(false);
+                    }}
+                    className="shrink-0 rounded-full border border-red-400/20 bg-red-400/[0.06] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-red-300/70 transition hover:border-red-400/35 hover:bg-red-400/10 hover:text-red-200"
+                  >
+                    Clear all
+                  </button>
+                </div>
+              )}
+
               <div className="flex gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {lastWatched.slice(0, 8).map((channel) => (
+                {(isHistoryManageOpen
+                  ? lastWatched
+                  : lastWatched.slice(0, 8)
+                ).map((channel) => (
                   <LastWatchedCard
                     key={channel.id}
                     channel={channel}
                     onOpen={openChannel}
+                    manage={isHistoryManageOpen}
+                    onRemove={removeRecentlyViewed}
                   />
                 ))}
               </div>

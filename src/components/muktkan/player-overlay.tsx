@@ -302,147 +302,382 @@ function BookReader({ media }: { media: BookMedia }) {
 export function LiveTvPlayer({ media }: { media: TvChannel }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const playerRef = useRef<HTMLDivElement>(null);
+
   const [state, setState] = useState<"loading" | "playing" | "error">("loading");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [selectedQuality, setSelectedQuality] = useState(
+    media.quality ?? "unknown"
+  );
+  const [variantOffset, setVariantOffset] = useState(0);
+  const [networkWarning, setNetworkWarning] = useState<string | null>(null);
+  const [failureReason, setFailureReason] = useState<string | null>(null);
+
+  const variants = media.streamVariants ?? [];
+
+  const orderedVariants = [...variants].sort((a, b) => {
+    const qualityRank: Record<string, number> = {
+      "1440p": 9,
+      "1080p": 8,
+      "1080i": 7,
+      "720p": 6,
+      "576p": 5,
+      "480p": 4,
+      "396p": 3,
+      "360p": 2,
+      "240p": 1,
+      unknown: 0,
+    };
+
+    return (
+      (qualityRank[b.quality] ?? 0) -
+      (qualityRank[a.quality] ?? 0)
+    );
+  });
+
+  const selectedVariants = orderedVariants.filter((variant) => {
+    if (selectedQuality === "unknown") return true;
+    return variant.quality === selectedQuality;
+  });
+
+  const availableVariants =
+    selectedVariants.length > 0 ? selectedVariants : orderedVariants;
+
+  const activeVariant =
+    availableVariants[
+      Math.min(variantOffset, Math.max(availableVariants.length - 1, 0))
+    ];
+
+  const activeUrl = activeVariant?.url ?? media.streamUrl;
+
+  const availableQualities = Array.from(
+    new Set(
+      orderedVariants
+        .map((variant) => variant.quality)
+        .filter((quality) => quality !== "unknown")
+    )
+  );
+
+  const checkNetwork = () => {
+    if (typeof navigator === "undefined") return;
+
+    const connection = (
+      navigator as Navigator & {
+        connection?: {
+          effectiveType?: string;
+          downlink?: number;
+          saveData?: boolean;
+        };
+      }
+    ).connection;
+
+    if (!connection) {
+      setNetworkWarning(null);
+      return;
+    }
+
+    if (connection.saveData) {
+      setNetworkWarning(
+        "Data Saver is enabled. Live playback may reduce quality."
+      );
+      return;
+    }
+
+    if (
+      connection.effectiveType === "slow-2g" ||
+      connection.effectiveType === "2g"
+    ) {
+      setNetworkWarning(
+        "Your network appears slow. A lower stream quality may be more stable."
+      );
+      return;
+    }
+
+    if (
+      typeof connection.downlink === "number" &&
+      connection.downlink < 2
+    ) {
+      setNetworkWarning(
+        "Available bandwidth appears limited. Playback may buffer."
+      );
+      return;
+    }
+
+    setNetworkWarning(null);
+  };
 
   useEffect(() => {
+    checkNetwork();
+
+    const connection = (
+      navigator as Navigator & {
+        connection?: {
+          addEventListener?: (
+            type: string,
+            listener: () => void
+          ) => void;
+          removeEventListener?: (
+            type: string,
+            listener: () => void
+          ) => void;
+        };
+      }
+    ).connection;
+
+    const onConnectionChange = () => checkNetwork();
+
+    connection?.addEventListener?.(
+      "change",
+      onConnectionChange
+    );
+
+    return () => {
+      connection?.removeEventListener?.(
+        "change",
+        onConnectionChange
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    setSelectedQuality(media.quality ?? "unknown");
+    setVariantOffset(0);
+    setFailureReason(null);
+  }, [media.id, media.quality]);
+
+  useEffect(() => {
+    let cancelled = false;
     let hls: any = null;
+
     const video = videoRef.current;
+
     if (!video) return;
 
     setState("loading");
+    setFailureReason(null);
 
-    const url = media.streamUrl;
-    const isHls = /\.m3u8(\?|$)/i.test(url) || url.includes(".m3u8");
+    const fail = (reason: string) => {
+      if (cancelled) return;
 
-    const onPlaying = () => setState("playing");
-    const onError = () => setState("error");
+      if (variantOffset < availableVariants.length - 1) {
+        setVariantOffset((value) => value + 1);
+        return;
+      }
+
+      setState("error");
+      setFailureReason(reason);
+    };
+
+    const onPlaying = () => {
+      if (!cancelled) {
+        setState("playing");
+        setFailureReason(null);
+      }
+    };
+
+    const onVideoError = () => {
+      fail(
+        media.geoBlocked
+          ? "This source is marked as geo-restricted by its catalogue metadata."
+          : media.not24x7
+            ? "This channel is not guaranteed to broadcast continuously."
+            : "The selected live stream could not be reached."
+      );
+    };
 
     video.addEventListener("playing", onPlaying);
-    video.addEventListener("error", onError);
+    video.addEventListener("error", onVideoError);
 
-    const syncFullscreenState = () => {
-      setIsFullscreen(document.fullscreenElement === playerRef.current);
+    const start = async () => {
+      try {
+        if (/\.m3u8(\?|$)/i.test(activeUrl)) {
+          const HlsModule = await import("hls.js");
+          const Hls = HlsModule.default;
+
+          if (cancelled) return;
+
+          if (Hls.isSupported()) {
+            hls = new Hls({
+              enableWorker: true,
+              lowLatencyMode: true,
+            });
+
+            hls.attachMedia(video);
+
+            hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+              if (!cancelled) {
+                hls.loadSource(activeUrl);
+              }
+            });
+
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+              if (cancelled) return;
+
+              if (
+                selectedQuality !== "unknown" &&
+                Array.isArray(hls.levels)
+              ) {
+                const matchingLevel = hls.levels.findIndex(
+                  (level: {
+                    height?: number;
+                    width?: number;
+                  }) =>
+                    `${level.height ?? 0}p` === selectedQuality
+                );
+
+                if (matchingLevel >= 0) {
+                  hls.currentLevel = matchingLevel;
+                }
+              }
+
+              video.play().catch(() => undefined);
+            });
+
+            hls.on(
+              Hls.Events.ERROR,
+              (
+                _event: unknown,
+                data: {
+                  fatal?: boolean;
+                  type?: string;
+                  details?: string;
+                }
+              ) => {
+                if (!data.fatal) return;
+
+                fail(
+                  data.details === "manifestLoadError"
+                    ? "The stream manifest could not be loaded."
+                    : data.type === "networkError"
+                      ? "The stream could not be reached over the network."
+                      : "The live stream reported a fatal playback error."
+                );
+              }
+            );
+
+            return;
+          }
+
+          if (video.canPlayType("application/vnd.apple.mpegurl")) {
+            video.src = activeUrl;
+            video.load();
+            await video.play().catch(() => undefined);
+            return;
+          }
+
+          fail("This browser does not support HLS playback.");
+          return;
+        }
+
+        video.src = activeUrl;
+        video.load();
+        await video.play().catch(() => undefined);
+      } catch {
+        fail("The live stream could not be initialized.");
+      }
     };
 
-    document.addEventListener("fullscreenchange", syncFullscreenState);
-
-    (async () => {
-      try {
-        if (isHls) {
-          // Safari native HLS
-          if (video.canPlayType("application/vnd.apple.mpegurl")) {
-            video.src = url;
-            await video.play().catch(() => {});
-          } else {
-            const mod = await import("hls.js");
-            const Hls = mod.default;
-
-            if (Hls.isSupported()) {
-              hls = new Hls({
-                enableWorker: true,
-                lowLatencyMode: true,
-              });
-
-              hls.loadSource(url);
-              hls.attachMedia(video);
-
-              hls.on(Hls.Events.ERROR, (_e: any, data: any) => {
-                if (data.fatal) setState("error");
-              });
-
-              await video.play().catch(() => {});
-            } else {
-              setState("error");
-            }
-          }
-        } else {
-          video.src = url;
-          await video.play().catch(() => {});
-        }
-      } catch {
-        setState("error");
-      }
-    })();
+    start();
 
     return () => {
+      cancelled = true;
+
       video.removeEventListener("playing", onPlaying);
-      video.removeEventListener("error", onError);
-      document.removeEventListener("fullscreenchange", syncFullscreenState);
+      video.removeEventListener("error", onVideoError);
 
-      if (hls) hls.destroy();
-
-      if (document.fullscreenElement === playerRef.current) {
-        void document.exitFullscreen().catch(() => {});
-      }
-
-      try {
-        const orientation = screen.orientation as ScreenOrientation & {
-          unlock?: () => void;
-        };
-
-        if (typeof orientation.unlock === "function") {
-          orientation.unlock();
+      if (hls) {
+        try {
+          hls.destroy();
+        } catch {
+          // Ignore HLS cleanup errors.
         }
-      } catch {
-        // Orientation cleanup is best-effort.
       }
+
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
     };
-  }, [media.streamUrl]);
-
-  const requestLandscape = async () => {
-    try {
-      const orientation = screen.orientation as ScreenOrientation & {
-        lock?: (orientation: string) => Promise<void>;
-      };
-
-      if (typeof orientation.lock === "function") {
-        await orientation.lock("landscape");
-      }
-    } catch {
-      // Orientation locking is not supported or permitted by this browser.
-    }
-  };
-
-  const releaseLandscape = async () => {
-    try {
-      const orientation = screen.orientation as ScreenOrientation & {
-        unlock?: () => void;
-      };
-
-      if (typeof orientation.unlock === "function") {
-        orientation.unlock();
-      }
-    } catch {
-      // Some browsers do not expose orientation unlock.
-    }
-  };
+  }, [
+    activeUrl,
+    availableVariants.length,
+    media.geoBlocked,
+    media.not24x7,
+    selectedQuality,
+    variantOffset,
+  ]);
 
   const toggleFullscreen = async () => {
-    const player = playerRef.current;
-    if (!player) return;
+    const element = playerRef.current;
+
+    if (!element) return;
 
     try {
-      if (document.fullscreenElement) {
+      if (!document.fullscreenElement) {
+        await element.requestFullscreen();
+        setIsFullscreen(true);
+
+        try {
+          const orientation = screen.orientation as ScreenOrientation & {
+            lock?: (orientation: string) => Promise<void>;
+          };
+
+          await orientation.lock?.("landscape");
+        } catch {
+          // Orientation locking is not supported everywhere.
+        }
+      } else {
         await document.exitFullscreen();
-        await releaseLandscape();
-        return;
+        setIsFullscreen(false);
+
+        try {
+          screen.orientation.unlock?.();
+        } catch {
+          // Ignore unsupported orientation APIs.
+        }
       }
-
-      if (player.requestFullscreen) {
-        await player.requestFullscreen();
-        await requestLandscape();
-        return;
-      }
-
-      const video = videoRef.current;
-      const legacyVideo = video as HTMLVideoElement & {
-        webkitEnterFullscreen?: () => void;
-      };
-
-      legacyVideo.webkitEnterFullscreen?.();
     } catch {
-      // Fullscreen can be rejected by browser/device policy.
+      // Ignore fullscreen failures.
+    }
+  };
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const active = Boolean(document.fullscreenElement);
+      setIsFullscreen(active);
+
+      if (!active) {
+        try {
+          screen.orientation.unlock?.();
+        } catch {
+          // Ignore unsupported orientation APIs.
+        }
+      }
+    };
+
+    document.addEventListener(
+      "fullscreenchange",
+      onFullscreenChange
+    );
+
+    return () =>
+      document.removeEventListener(
+        "fullscreenchange",
+        onFullscreenChange
+      );
+  }, []);
+
+  const retryStream = () => {
+    setVariantOffset(0);
+    setFailureReason(null);
+    setState("loading");
+  };
+
+  const tryNextVariant = () => {
+    if (variantOffset < availableVariants.length - 1) {
+      setVariantOffset((value) => value + 1);
+      setFailureReason(null);
+      setState("loading");
+    } else {
+      retryStream();
     }
   };
 
@@ -463,21 +698,101 @@ export function LiveTvPlayer({ media }: { media: TvChannel }) {
       {state === "loading" && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/80">
           <Loader2 className="h-8 w-8 animate-spin" />
-          <p className="text-sm">Tuning into {media.title}…</p>
+
+          <p className="text-sm">
+            Tuning into {media.title}…
+          </p>
+
+          {activeVariant?.quality &&
+            activeVariant.quality !== "unknown" && (
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-white/45">
+                {activeVariant.quality}
+              </span>
+            )}
+        </div>
+      )}
+
+      {networkWarning && state !== "error" && (
+        <div className="absolute left-4 right-4 top-16 z-20 flex justify-center">
+          <div className="rounded-full border border-amber-400/20 bg-black/75 px-3 py-1.5 text-[10px] text-amber-200/75 backdrop-blur">
+            {networkWarning}
+          </div>
         </div>
       )}
 
       {state === "error" && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center text-white">
           <AlertTriangle className="h-9 w-9 text-amber-400" />
-          <p className="max-w-sm text-sm text-white/80">
-            This live stream couldn't be reached right now. IPTV channels rotate often — try another channel from the Live TV shelf.
+
+          <p className="max-w-sm text-sm leading-6 text-white/80">
+            {failureReason ??
+              "This live stream could not be reached right now."}
           </p>
-          <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">
+
+          {media.geoBlocked && (
+            <span className="rounded-full border border-amber-400/15 bg-amber-400/5 px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-amber-200/65">
+              Catalogue marks this source as geo-restricted
+            </span>
+          )}
+
+          {media.not24x7 && (
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-white/45">
+              Not guaranteed 24/7
+            </span>
+          )}
+
+          <div className="mt-2 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={retryStream}
+              className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white/15"
+            >
+              Retry
+            </button>
+
+            {availableVariants.length > 1 &&
+              variantOffset <
+                availableVariants.length - 1 && (
+                <button
+                  type="button"
+                  onClick={tryNextVariant}
+                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/65 transition hover:bg-white/10 hover:text-white"
+                >
+                  Try another feed
+                </button>
+              )}
+          </div>
+
+          <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-white/45">
             {media.country}
           </span>
         </div>
       )}
+
+      {availableQualities.length > 1 &&
+        state !== "error" && (
+          <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1 rounded-full border border-white/10 bg-black/70 p-1 backdrop-blur">
+            {availableQualities.map((quality) => (
+              <button
+                key={quality}
+                type="button"
+                onClick={() => {
+                  setSelectedQuality(quality);
+                  setVariantOffset(0);
+                  setState("loading");
+                }}
+                className={cn(
+                  "rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] transition",
+                  selectedQuality === quality
+                    ? "bg-white text-black"
+                    : "text-white/50 hover:bg-white/10 hover:text-white"
+                )}
+              >
+                {quality}
+              </button>
+            ))}
+          </div>
+        )}
 
       {state === "playing" && (
         <>
@@ -490,8 +805,16 @@ export function LiveTvPlayer({ media }: { media: TvChannel }) {
             type="button"
             onClick={toggleFullscreen}
             className="absolute bottom-4 right-4 z-20 grid h-10 min-w-10 place-items-center rounded-full border border-white/15 bg-black/65 px-3 text-[11px] font-semibold uppercase tracking-wider text-white backdrop-blur transition hover:bg-black/85"
-            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-            title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+            aria-label={
+              isFullscreen
+                ? "Exit fullscreen"
+                : "Enter fullscreen"
+            }
+            title={
+              isFullscreen
+                ? "Exit fullscreen"
+                : "Fullscreen"
+            }
           >
             {isFullscreen ? "Exit" : "Fullscreen"}
           </button>

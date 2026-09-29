@@ -28,6 +28,7 @@ interface OnboardingState {
   toggleFavorite: (media: Media) => void;
   isFavorite: (id: string) => boolean;
   pushRecentlyViewed: (media: Media) => void;
+  removeRecentlyViewed: (id: string) => void;
   clearRecentlyViewed: () => void;
   setReadingProgress: (id: string, fraction: number) => void;
   getReadingProgress: (id: string) => number;
@@ -68,6 +69,10 @@ export const useOnboarding = create<OnboardingState>()(
             media,
             ...s.recentlyViewed.filter((m) => m.id !== media.id),
           ].slice(0, 16),
+        })),
+      removeRecentlyViewed: (id) =>
+        set((s) => ({
+          recentlyViewed: s.recentlyViewed.filter((m) => m.id !== id),
         })),
       clearRecentlyViewed: () => set({ recentlyViewed: [] }),
       setReadingProgress: (id, fraction) =>

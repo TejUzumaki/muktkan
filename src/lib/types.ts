@@ -38,12 +38,52 @@ export interface BookMedia extends BaseMedia {
   subjects?: string[];
 }
 
+export type TvStreamQuality =
+  | "2160p"
+  | "1440p"
+  | "1080p"
+  | "1080i"
+  | "720p"
+  | "576p"
+  | "504p"
+  | "480p"
+  | "400p"
+  | "396p"
+  | "360p"
+  | "240p"
+  | "unknown";
+
+export interface TvStreamVariant {
+  url: string;
+  quality: TvStreamQuality;
+  labels: string[];
+  title?: string;
+  feed?: string;
+}
+
 export interface TvChannel extends BaseMedia {
   kind: "tv";
   streamUrl: string;
   logo: string;
   country?: string;
   group?: string;
+  region?: string;
+
+  /**
+   * Known source-level stream variants from iptv-org.
+   * The player may additionally discover multiple HLS levels
+   * inside a master playlist.
+   */
+  streamVariants?: TvStreamVariant[];
+
+  /** Best known source quality. */
+  quality?: TvStreamQuality;
+
+  /** True when every known source variant is geo-blocked. */
+  geoBlocked?: boolean;
+
+  /** True when the preferred source is marked Not 24/7. */
+  not24x7?: boolean;
 }
 
 export type Media = MovieMedia | BookMedia | TvChannel;
